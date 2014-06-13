@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd bin
+if [ ! -f dasm.exe ] ; then
+    unzip *.zip
+fi
