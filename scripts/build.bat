@@ -1,0 +1,1 @@
+bin\dasm.exe src\flappyblock.asm -Isrc -f3 -oflappyblock.bin
