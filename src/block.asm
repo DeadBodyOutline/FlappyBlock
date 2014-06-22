@@ -90,11 +90,12 @@ GameCalc:           SUBROUTINE
                     CLC
                     LDA P0VPos
                     ADC #-2
+                    CMP #2
+                    BCC .fuck
                     STA P0VPos
-                    ;CMP #0
-                    ;BNE .loop
 .loop               LDA INTIM
                     BNE .loop
+.fuck               ; TODO GAME OVER
                     RTS
 
 ; Draw Screen
