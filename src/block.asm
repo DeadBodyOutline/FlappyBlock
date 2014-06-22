@@ -74,27 +74,25 @@ VerticalBlank:      SUBROUTINE
 
 ; Check Console Switches
 CheckSwitches:      SUBROUTINE
-                    LDA P0UP            ; Load value for key UP
-                    BIT SWCHA           ; Check if joystick is UP
-                    BNE .P0ChkKeyDown   ;
-                    LDA P0VPos          ;
-                    CMP #SCREEN_LINES-PLAYER_HEIGHT
-                    BCS .P0ChkKeyDown   ;
-                    LDA #3              ;
-                    ADC P0VPos          ;
-                    STA P0VPos          ;
-.P0ChkKeyDown       LDA P0DOWN          ; Load value for key DOWN
-                    BIT SWCHA           ; Check if joystick is DOWN
+                    LDA P0UP
+                    BIT SWCHA
                     BNE .exit
                     LDA P0VPos
-                    CMP #5
-                    BCC .exit
-                    SBC #3
-                    STA P0VPos
+                    CMP #SCREEN_LINES-PLAYER_HEIGHT
+                    BCS .exit
+                    LDA #6
+                    ADC P0VPos
+                    STA P0VPos          ;
 .exit               RTS
 
 ; Game Calculations
 GameCalc:           SUBROUTINE
+                    CLC
+                    LDA P0VPos
+                    ADC #-2
+                    STA P0VPos
+                    ;CMP #0
+                    ;BNE .loop
 .loop               LDA INTIM
                     BNE .loop
                     RTS
