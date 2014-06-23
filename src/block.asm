@@ -18,6 +18,7 @@ PLAYER_GFX     = %11111111           ; Players grafix
                 SEG.U   Variables
                 ORG     $80
 P0VPos          ds      1            ; Player 0 vertical position
+score           .byte
 
 ; Start of code
                     SEG     Code
@@ -152,6 +153,73 @@ HPosition:          SUBROUTINE
                     STA.WX  HMP0,x     ; Horizontal Move object
                     STA     RESP0,x    ; Reset object's horizontal position
                     RTS
+
+; damn digits
+                    ORG     $f600
+
+Digits:
+                    .byte   <Zero,  <One,   <Two,   <Three, <Four
+                    .byte   <Five,  <Six,   <Seven, <Eight, <Nine
+
+One:
+                    .byte   %11111111
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+Seven:
+                    .byte   %11111111
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+Four:
+                    .byte   %11111111
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+Zero:
+                    .byte   %11000011
+                    .byte   %10111101
+                    .byte   %10111101
+                    .byte   %10111101
+                    .byte   %11111111
+                    .byte   %10111101
+                    .byte   %10111101
+                    .byte   %10111101
+Three:
+                    .byte   %11000011
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+Nine:
+                    .byte   %11000011
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+Eight:
+                    .byte   %11000011
+                    .byte   %10111101
+                    .byte   %10111101
+                    .byte   %10111101
+Six:
+                    .byte   %11000011
+                    .byte   %10111101
+                    .byte   %10111101
+                    .byte   %10111101
+Two:
+                    .byte   %11000011
+                    .byte   %10111111
+                    .byte   %10111111
+                    .byte   %10111111
+Five:
+                    .byte   %11000011
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11111101
+                    .byte   %11000011
+                    .byte   %10111111
+                    .byte   %10111111
+                    .byte   %10111111
+                    .byte   %11000011
 
 ; Interrupts - Not used by the 2600 but exists on a 7800
            ORG ROMStart + ROMSize - 3*2
