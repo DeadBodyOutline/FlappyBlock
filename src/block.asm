@@ -41,9 +41,8 @@ MainLoop:
 ; Game Initialization
 GameInit:           SUBROUTINE
                     ; Init objects colors
-                    LDA #BLUE
+                    LDA #BROWN
                     STA COLUP0          ; Player 0 color
-                    LDA #RED
                     ; Init objects vertical position
                     LDA #(SCREEN_LINES/2)
                     STA P0VPos          ; Player 0 vertical position
@@ -63,8 +62,7 @@ VerticalBlank:      SUBROUTINE
                     STA VSYNC         ; Begin vertical sync
                     STA WSYNC         ; First line of VSYNC
                     STA WSYNC         ; Second line of VSYNC
-                    ;LDA #(VERT_BLANK*SCANLINE_TIME)/53 ; PAL 53, NTSC 43
-                    LDA #(VERT_BLANK*SCANLINE_TIME)/64 ; PAL 53, NTSC 43
+                    LDA #(VERT_BLANK*SCANLINE_TIME)/53
                     STA TIM64T        ;  Start timer
                     LDA #0            ;
                     STA CXCLR         ; Clear colision register
@@ -91,22 +89,21 @@ GameCalc:           SUBROUTINE
                     LDA P0VPos
                     ADC #-2
                     CMP #2
-                    BCC .fuck
+                    BCC .gameOver
                     STA P0VPos
 .loop               LDA INTIM
                     BNE .loop
-.fuck               ; TODO GAME OVER
+.gameOver           ; TODO GAME OVER
                     RTS
 
-; Draw Screen
 DrawScreen:         SUBROUTINE
-                    LDA #WHITE
+                    LDA #BLACK
                     STA COLUPF          ; Playfield foreground color
-                    LDA #GREEN
+                    LDA #DARK_PURPLE
                     STA COLUBK          ; Playfield Backfround color
                     STA WSYNC
                     STA VBLANK          ; End the VBLANK period with a zero
-; >>>>>>>>>>>>>>>>>>>>>>>>>>>> Kernel starts here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
                     LDY #SCREEN_LINES
 .screenloop         STA WSYNC
                     ; Player 0 vertical position
@@ -123,32 +120,25 @@ DrawScreen:         SUBROUTINE
                     SEC
                     DEY
                     BNE .screenloop
-; >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Kernel ends here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
                     RTS
 
 ; Over Scan
 OverScan:           SUBROUTINE
                     LDA #2            ; VBlank On Value
                     STA VBLANK        ; Activate vertical blank
-                    LDA #(OVERSCAN*SCANLINE_TIME)/64 ;2
+                    LDA #(OVERSCAN*SCANLINE_TIME)/53 ;2
                     STA TIM64T        ; Start timer
-; >>>>>>>>>>>>>>>>>>>>>>>>>> Extra code starts here <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
                     LDA #0
                     STA GRP0          ; Clear Player 0
                     STA COLUPF        ; Clear PF foreground
                     STA COLUBK        ; Clear PF background
-; >>>>>>>>>>>>>>>>>>>>>>>>>> Extra ends starts here <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 OverScanLoop:       LDA INTIM         ; Get current machine cycle
                     BNE OverScanLoop  ; Loop until A is zero
                     RTS
 
-; Subroutines
-
-; HPosition - Horizontal Position Object
-; Input: 
-;  A = Object's Horizontal Position
-;  X = Object (0 = Player0; 1 = Player1; 2 = Missile0; 3 = Missile1; 4 = Ball)
-; WTF?
 HPosition:          SUBROUTINE
                     SEC
                     STA     WSYNC
